@@ -57,5 +57,26 @@ class IntCodeComputerTest(unittest.TestCase):
         result = int_code_comp.process(in_prg.readlines()[0])
         in_prg.close()
 
+    def test_jump_if_true_position_jumps(self):
+        prg = '5,0,3,4,99'
+        result = int_code_comp.process(prg)
+        self.assertEqual(result, '5,0,3,4,99')
+
+    def test_jump_if_true_position_no_jump(self):
+        prg = '5,2,0,99'
+        result = int_code_comp.process(prg)
+        self.assertEqual(result, '5,2,0,99')
+ 
+    def test_jump_if_true_immideate_no_jump(self):
+        prg = '1105,0,7,1,0,0,6,99'
+        result = int_code_comp.process(prg)
+        self.assertEqual(result, '1105,0,7,1,0,0,2210,99')
+
+    def test_jump_if_true_immideate_jumps(self):
+        prg = '4,0,1105,1,9,1,0,0,8,99'
+        result = int_code_comp.process(prg)
+        self.assertEqual(result, '4,0,1105,1,9,1,0,0,8,99')
+    
+
 if __name__ == '__main__':
     unittest.main()
