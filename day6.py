@@ -12,13 +12,25 @@ def get_dict(str_map):
                     res_dict[planets[1]].append(planets[0])
     return res_dict
 
-def get_orbit_count(dict_map, planet, count = 0):
-    if planet == 'COM':
+def get_orbit_count(dict_map, source, dest = 'COM', count = 0):
+    if source == dest:
         return count
     else:
-        centers = dict_map[planet]
+        centers = dict_map[source]
         for center in centers:
-            return  get_orbit_count(dict_map, center, count + 1)
+            return  get_orbit_count(dict_map, center, dest, count + 1)
+
+def get_route(dict_map, source, dest, route = None):
+    if route == None:
+        route = []
+        route.append(source)
+    if source == dest:
+        return route
+    else:
+        centers = dict_map[source]
+        for center in centers:
+            route.append(center)
+            return get_route(dict_map, center, dest, route)
 
 def get_check_sum(dict_map):
     count = 0
