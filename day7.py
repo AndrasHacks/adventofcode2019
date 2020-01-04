@@ -87,8 +87,8 @@ def convert_number(decimal, base):
 
 class Amplifier():
 
-    def __init__(self, input, phase):
-        self.input = input
+    def __init__(self, inp, phase):
+        self.input = inp
         self.phase = phase
 
     def process(self, program):
@@ -108,12 +108,23 @@ class Amplifier():
                 out_buffer = str(to_out)
             else:
                 out_buffer += '\n' + str(to_out)
-
         prg_res = process(program, input_fn, out_fn)
         return {'prg_res': prg_res, 'print_res': out_buffer}
 
 class AmplifierChain():
 
-    def __init__(self, input, phases):
-       self.input = input
+    def __init__(self, inp, phases):
+       self.input = inp
        self.phases = phases
+
+    def process(self, program):
+        amp_input = self.input
+        result = None
+        for i in range(5):
+            amp = Amplifier(self.input, self.phases[i])
+            result = amp.process(program)
+            amp_input = result['print_res']
+        return result
+
+
+

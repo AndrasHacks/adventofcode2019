@@ -129,11 +129,27 @@ class IntCodeComputerTest(unittest.TestCase):
         self.assertEqual('4,0,3,2,4,0,4,3,99', result['prg_res'])
         self.assertEqual('4\n2', result['print_res'])
 
-    def test_get_amplifier_chain(self):
+    def test_amplifier_given_example(self):
+        amplifier = int_code_comp.Amplifier(0,4)
+        prog = '3,15,3,16,1002,16,10,16,1,16,15,15,4,15,99,0,0'
+        result = amplifier.process(prog)
+        self.assertEqual('4', result['print_res'])
+
+    def x_test_get_amplifier_chain(self):
         amplifier_chain = int_code_comp.AmplifierChain(1, '00000')
         result = amplifier_chain.process('1,0,0,3,99')
         self.assertEqual(result['prg_res'], '1,0,0,2,99')
         self.assertEqual(result['print_res'], '')
+
+    def test_given_example(self):
+        prog = '3,15,3,16,1002,16,10,16,1,16,15,15,4,15,99,0,0'
+        phases = int_code_comp.get_amplifier_phase_strings()
+        results = []
+        for i in range(len(phases)):
+            amp_chain = int_code_comp.AmplifierChain(0, phases[i])
+            result = amp_chain.process(prog)
+            results.append(int(result['print_res']))
+        self.assertEqual(max(results), 43210)
 
 if __name__ == '__main__':
     unittest.main()
