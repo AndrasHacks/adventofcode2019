@@ -112,9 +112,9 @@ class IntCodeComputerTest(unittest.TestCase):
 
     def test_get_phase_strings(self):
         phase_strings = int_code_comp.get_amplifier_phase_strings()
-        self.assertEqual(5**5, len(phase_strings))
-        self.assertEqual('00000', phase_strings[0])
-        self.assertEqual('44444', phase_strings[5**5 - 1])
+        self.assertEqual(120, len(phase_strings))
+        self.assertEqual('01234', phase_strings[0])
+        self.assertEqual('43210', phase_strings[119])
 
     def test_get_amplifier(self):
         amplifier = int_code_comp.Amplifier(0,0)
@@ -143,6 +143,12 @@ class IntCodeComputerTest(unittest.TestCase):
 
     def test_given_example(self):
         prog = '3,15,3,16,1002,16,10,16,1,16,15,15,4,15,99,0,0'
+        amp_chain = int_code_comp.AmplifierChain(0, '43210')
+        result = amp_chain.process(prog)
+        self.assertEqual(result['print_res'], '43210')
+
+    def test_given_example_with_phase_settings(self):
+        prog = '3,15,3,16,1002,16,10,16,1,16,15,15,4,15,99,0,0'
         phases = int_code_comp.get_amplifier_phase_strings()
         results = []
         for i in range(len(phases)):
@@ -150,6 +156,18 @@ class IntCodeComputerTest(unittest.TestCase):
             result = amp_chain.process(prog)
             results.append(int(result['print_res']))
         self.assertEqual(max(results), 43210)
+
+    def test_day7_part_1(self):
+        day7 = open(r'day7.input.txt', 'r')
+        prog = day7.readlines()[0]
+        day7.close()
+        phases = int_code_comp.get_amplifier_phase_strings()
+        results = []
+        for i in range(len(phases)):
+            amp_chain = int_code_comp.AmplifierChain(0, phases[i])
+            result = amp_chain.process(prog)
+            results.append(int(result['print_res']))
+        print('Day7 part 1 solution: ', max(results))
 
 if __name__ == '__main__':
     unittest.main()

@@ -75,7 +75,9 @@ def raise_memory_exception(instruction_pointer, command, prog_len):
 def get_amplifier_phase_strings():
     phase_strings = []
     for decimal in range(5**5):
-        phase_strings.append(convert_number(decimal, 5))
+        converted = convert_number(decimal, 5)
+        if len(list(converted)) == len(set(list(converted))):
+            phase_strings.append(convert_number(decimal, 5))
     return phase_strings
 
 def convert_number(decimal, base):
@@ -121,7 +123,7 @@ class AmplifierChain():
         amp_input = self.input
         result = None
         for i in range(5):
-            amp = Amplifier(self.input, self.phases[i])
+            amp = Amplifier(amp_input, self.phases[i])
             result = amp.process(program)
             amp_input = result['print_res']
         return result
